@@ -1,5 +1,7 @@
 package com.ee.scrabble;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -7,62 +9,50 @@ import java.util.Random;
  */
 
 public class CharBox {
-    private char[][] charsInWordChart;
+    private final int MAX_CHARS_IN_BOX = 50;
+    private List<Character> boxOfchars;
 
     public CharBox() {
         populateWordChart();
     }
 
     private void populateWordChart() {
-        this.charsInWordChart = new char[50][50];
+        this.boxOfchars = new LinkedList<>();
         addCharactersToWordChartRandomly();
     }
 
     private void addCharactersToWordChartRandomly() {
         Random randomObject = new Random();
-        for (int rowIterator = 0; rowIterator < this.charsInWordChart.length; rowIterator++) {
-            for (int columnIterator = 0; columnIterator < this.charsInWordChart[rowIterator].length; columnIterator++) {
-                this.charsInWordChart[rowIterator][columnIterator] = (char) (randomObject.nextInt(26) + 'a');
-            }
+        for (int boxIterator = 0; boxIterator < MAX_CHARS_IN_BOX; boxIterator++) {
+                this.boxOfchars.add((char)(randomObject.nextInt(26) + 'a'));
         }
     }
 
     public char[] requestStreamOfCharacters(int numberOfCharacters) {
+        if(numberOfCharacters>MAX_CHARS_IN_BOX){
+            throw new IllegalArgumentException(" Not that many charcters in the box");
+        }
+        if(this.boxOfchars.size()<numberOfCharacters){
+            throw new IllegalArgumentException("Not that many characters left please request for characters less than"+this.boxOfchars.size());
+        }
         Random randomObject = new Random();
         char[] resultantCharArray = new char[numberOfCharacters];
         int flag = 0;
         while (flag < numberOfCharacters) {
-            int randomRowNumber = randomObject.nextInt(50);
-            int randomColumnNumber = randomObject.nextInt(50);
-            if (isCharacterAtThisPositionAvailable(randomRowNumber, randomColumnNumber)) {
-                resultantCharArray[flag] = this.charsInWordChart[randomRowNumber][randomColumnNumber];
-                makePlaceVacant(randomRowNumber, randomColumnNumber);
+            int randomNumber = randomObject.nextInt(this.boxOfchars.size()-1);
+                resultantCharArray[flag] = this.boxOfchars.get(randomNumber);
+                removeCharacterFromBox(randomNumber);
                 flag++;
             }
-        }
         return resultantCharArray;
     }
 
-    private void makePlaceVacant(int rowNumber, int columnNumber) {
-        this.charsInWordChart[rowNumber][columnNumber] = '\u0000';
-    }
-
-    private boolean isCharacterAtThisPositionAvailable(int rowNumber, int columnNumber) {
-        if (this.charsInWordChart[rowNumber][columnNumber] != '\u0000') {
-            return true;
-        }
-        return false;
+    private void removeCharacterFromBox(int indexOfcharacter) {
+        this.boxOfchars.remove(indexOfcharacter);
     }
 
     @Override
     public String toString() {
-        String stringToReturn = "";
-        for (int rowIterator=0;rowIterator<this.charsInWordChart.length;rowIterator++){
-            for (int colIterator =0;colIterator<this.charsInWordChart[rowIterator].length;colIterator++ ){
-                stringToReturn += this.charsInWordChart[rowIterator][colIterator]+" ";
-            }
-            stringToReturn+="\n";
-        }
-        return stringToReturn;
+        return (this.boxOfchars).toString();
     }
 }

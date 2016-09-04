@@ -26,4 +26,5 @@ public class Scrabble {
     public synchronized char[] requestCharactersToFormAWord(int numberOfcharacters){
         return this.charBox.requestStreamOfCharacters(numberOfcharacters);
     }
+
 }
