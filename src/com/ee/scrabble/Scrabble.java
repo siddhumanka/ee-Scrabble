@@ -7,14 +7,14 @@ import java.util.Random;
 /**
  * @author : Sid
  * @version : 0.1
- * Created by user-2 on 4/9/16.
+ *          Created by user-2 on 4/9/16.
  */
 public class Scrabble {
     private final int MAX_CHARS_IN_BOX = 50;
     private List<Character> requestedListOfCharacters;
     private List<Character> boxOfChars;
 
-    private  Scrabble(){
+    private Scrabble() {
         populateWordChart();
     }
 
@@ -38,9 +38,7 @@ public class Scrabble {
     }
 
     /**
-     *
      * @param numOfCharacters : Number of characters
-     *
      */
     private void setRequestedListOfCharacters(int numOfCharacters) {
         this.requestedListOfCharacters = requestListOfCharacters(numOfCharacters);
@@ -58,6 +56,7 @@ public class Scrabble {
             this.boxOfChars.add((char) (randomObject.nextInt(26) + 'a'));
         }
     }
+
     private List<Character> requestListOfCharacters(int numberOfCharacters) {
         if (numberOfCharacters > MAX_CHARS_IN_BOX) {
             throw new IllegalArgumentException(" Not that many charcters in the box");
